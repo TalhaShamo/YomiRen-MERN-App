@@ -18,8 +18,25 @@ const app = express();
 // Connect to database
 connectDB();
 
+// We create a "guest list" of allowed origins.
+const allowedOrigins = [
+  'http://localhost:5173', // Your local frontend for development
+  'https://yomiren-app.vercel.app' // A placeholder for our future live frontend
+];
+
+// We configure our CORS middleware to only use this guest list.
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions)); // We now pass our options to cors.
 app.use(express.json());
 
 // Define Routes
