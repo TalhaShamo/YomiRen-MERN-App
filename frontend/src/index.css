@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* We now define our dark mode colors as the one and only theme in :root */
+  :root {
+    --background: 140 5% 18%;     /* #2C3330 - Our main dark background */
+    --foreground: 138 65% 91%;     /* #D6F9DD - Light green for text */
+    
+    --card: 140 6% 23%;           /* #3A423B - A slightly lighter dark for cards */
+    --card-foreground: 138 65% 91%;
+    
+    --border: 140 5% 30%;          /* #4A514B - A subtle border for dark mode */
+    
+    --primary: 88 85% 72%;         /* #ABDF75 - Main Green */
+    --primary-foreground: 140 5% 18%; /* #2C3330 - Dark text for on top of the green */
+    
+    --secondary: 138 65% 91%;
+    --secondary-foreground: 140 5% 18%;
+
+    --accent: 140 92% 81%;
+    --muted-foreground: 185 18% 52%;
+  }
+
+  /* Apply our base styles to the entire application */
+  body {
+    @apply bg-background text-foreground;
+  }
+}
