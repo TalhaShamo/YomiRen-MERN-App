@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'; // Import new hooks for sta
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../features/auth/authSlice';
-import { User, BookMarked, Library, LogOut } from 'lucide-react'; // Import new Logout icon
+import { User, BookMarked, Library, LogOut, Menu, X } from 'lucide-react'; // Import new Logout icon
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -11,6 +11,9 @@ const Navbar = () => {
   // Local state to manage whether the dropdown is open or closed.
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
+  // New local state for the mobile hamburger menu.
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   // A ref to get a direct reference to the dropdown menu's DOM element.
   const dropdownRef = useRef(null);
 
@@ -47,24 +50,25 @@ const Navbar = () => {
           YomiRen
         </Link>
 
-        <nav>
-          <ul className="flex items-center space-x-4 md:space-x-6">
+        <nav className="flex items-center">
+          {/* This is the main navigation for larger screens. */}
+          <ul className="hidden sm:flex items-center space-x-4 md:space-x-6">
             {token ? (
               // --- LOGGED-IN USER VIEW ---
               <>
-                <li className="hidden sm:block">
+                <li>
                   <Link to="/deck" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                     <BookMarked size={18} /> My Deck
                   </Link>
                 </li>
-                <li className="hidden sm:block">
+                <li>
                   <Link to="/resources" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                     <Library size={18} /> Resources
                   </Link>
                 </li>
                 
                 {/* --- THIS IS THE DROPDOWN --- */}
-                <li className="relative" ref={dropdownRef}>
+                <li className="relative ml-2" ref={dropdownRef}>
                   {/* This button now toggles the dropdown's visibility. */}
                   <button 
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -77,7 +81,6 @@ const Navbar = () => {
                   {/* The dropdown menu is conditionally rendered based on state. */}
                   {isDropdownOpen && (
                     <div className="absolute top-full right-0 mt-2 w-48 bg-card border border-border rounded-md shadow-lg">
-                      {/* Placeholder for future "Settings" link */}
                       <div className="px-4 py-2 text-muted-foreground border-b border-border">
                         Signed in as <strong>{user?.username || 'User'}</strong>
                       </div>
@@ -110,8 +113,41 @@ const Navbar = () => {
               </>
             )}
           </ul>
+
+          {/* This is the hamburger menu button, only visible on mobile. */}
+          <div className="sm:hidden">
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Open menu">
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </nav>
       </div>
+
+      {/* This is the mobile menu itself, which opens as a dropdown. */}
+      {isMobileMenuOpen && (
+        <div className="sm:hidden bg-card border-t border-border">
+          <ul className="flex flex-col p-4 space-y-4">
+            {token ? (
+              // --- LOGGED-IN MOBILE VIEW ---
+              <>
+                <li><Link to="/deck" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">My Deck</Link></li>
+                <li><Link to="/resources" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">Resources</Link></li>
+                <li className="border-t border-border pt-4">
+                  <button onClick={onLogout} className="flex items-center gap-2 w-full text-left">
+                    <LogOut size={16} /> Logout ({user?.username})
+                  </button>
+                </li>
+              </>
+            ) : (
+              // --- LOGGED-OUT MOBILE VIEW ---
+              <>
+                <li><Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>Login</Link></li>
+                <li><Link to="/register" onClick={() => setIsMobileMenuOpen(false)} className="bg-primary text-primary-foreground font-bold py-2 px-4 rounded-lg text-center block">Register</Link></li>
+              </>
+            )}
+          </ul>
+        </div>
+      )}
     </header>
   );
 };
