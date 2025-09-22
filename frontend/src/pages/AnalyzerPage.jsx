@@ -148,7 +148,7 @@ const AnalyzerPage = () => {
             </div>
           </div>
 
-          <div className="bg-card p-6 rounded-lg border border-border text-3xl leading-loose">
+          <div className="bg-card p-6 rounded-lg border border-border text-lg text-md:3xl leading-loose">
             {isAnalyzing && <p className="text-muted-foreground">Analyzing your text...</p>}
             {isAnalyzerError && <p className="text-red-400">{analyzerMessage}</p>}
             
