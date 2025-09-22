@@ -21,7 +21,7 @@ connectDB();
 // We create a "guest list" of allowed origins.
 const allowedOrigins = [
   'http://localhost:5173', // Your local frontend for development
-  'https://yomiren-app.vercel.app' // A placeholder for our future live frontend
+  'https://yomiren.vercel.app' // Our deployed URL
 ];
 
 // We configure our CORS middleware to only use this guest list.
