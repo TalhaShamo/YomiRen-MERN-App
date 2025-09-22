@@ -4,3 +4,6 @@
 
 # MOST IMPORTANT: Ignore environment variable files (secrets)
 /backend/.env
+
+# Ignore the frontend local api
+/frontend/.env.local

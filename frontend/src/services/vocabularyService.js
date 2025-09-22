@@ -1,6 +1,7 @@
-import axios from 'axios';
+import api from './api'; // We import our custom, secure axios instance.
 
-const API_URL = 'http://localhost:5000/api/vocabulary/';
+// The base URL is now relative to the baseURL set in our api.js instance.
+const API_URL = '/vocabulary/';
 
 // Get user's vocabulary words
 const getWords = async (token) => {
@@ -12,7 +13,7 @@ const getWords = async (token) => {
     },
   };
 
-  const response = await axios.get(API_URL, config);
+  const response = await api.get(API_URL, config);
   return response.data;
 };
 
@@ -24,10 +25,11 @@ const createWord = async (wordData, token) => {
     },
   };
 
-  const response = await axios.post(API_URL, wordData, config);
+  const response = await api.post(API_URL, wordData, config);
   return response.data;
 };
 
+// Delete a user's word
 const deleteWord = async (wordId, token) => {
   const config = {
     headers: {
@@ -37,7 +39,7 @@ const deleteWord = async (wordId, token) => {
 
   // We use axios.delete for DELETE requests.
   // The ID of the word to delete is passed in the URL.
-  const response = await axios.delete(API_URL + wordId, config);
+  const response = await api.delete(API_URL + wordId, config);
   
   // The backend will send back a success message and the ID of the deleted word.
   return response.data;
@@ -51,11 +53,11 @@ const getReviewWords = async (token) => {
     },
   };
   // We call our new '/review' endpoint.
-  const response = await axios.get(API_URL + 'review', config);
+  const response = await api.get(API_URL + 'review', config);
   return response.data;
 };
 
-// Updating the nextReview of a Card based on rating given by user.
+// Update a word's SRS data after a review.
 const updateWordReview = async (wordId, rating, token) => {
   const config = {
     headers: {
@@ -66,8 +68,20 @@ const updateWordReview = async (wordId, rating, token) => {
   const reviewData = { rating };
 
   // We use axios.put to update the resource, sending the rating in the body.
-  const response = await axios.put(API_URL + 'review/' + wordId, reviewData, config);
+  const response = await api.put(API_URL + 'review/' + wordId, reviewData, config);
   
+  return response.data;
+};
+
+// Get the count of words due for review.
+const getReviewCount = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  // We call our new '/review/count' endpoint.
+  const response = await api.get(API_URL + 'review/count', config);
   return response.data;
 };
 
@@ -77,6 +91,7 @@ const vocabularyService = {
   deleteWord,
   getReviewWords,
   updateWordReview,
+  getReviewCount,
 };
 
 export default vocabularyService;

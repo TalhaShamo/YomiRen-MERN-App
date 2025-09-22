@@ -1,7 +1,7 @@
-import axios from 'axios';
+import api from './api';
 
 // The base URL of our backend's analyzer endpoint.
-const API_URL = 'http://localhost:5000/api/analyzer/';
+const API_URL = '/analyzer/';
 
 // Analyze a block of text.
 const analyzeText = async (textData, token) => {
@@ -13,7 +13,7 @@ const analyzeText = async (textData, token) => {
   };
 
   // Make the POST request to our backend.
-  const response = await axios.post(API_URL + 'analyze', textData, config);
+  const response = await api.post(API_URL + 'analyze', textData, config);
   
   // Return the array of analyzed tokens from the backend.
   return response.data;

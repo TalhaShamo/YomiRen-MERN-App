@@ -4,7 +4,7 @@ import { logout } from '../features/auth/authSlice'; // Import the logout action
 
 // Create a new Axios instance with a base URL.
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 // --- THIS IS THE INTERCEPTOR ---
